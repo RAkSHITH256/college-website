@@ -1,4 +1,4 @@
-name: Docker Build and Push
+name: Docker Build and Deploy
 
 on:
   push:
@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
     - name: Checkout Code
       uses: actions/checkout@v4
 
@@ -26,3 +27,18 @@ jobs:
     - name: Push Docker Image
       run: |
         docker push raks25/college-website:latest
+
+    - name: Set up Kubeconfig
+      run: |
+        mkdir -p ~/.kube
+        echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v4
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl set image deployment/college-website-deployment \
+        college-website=raks25/college-website:latest
+
+        kubectl rollout status deployment/college-website-deployment
