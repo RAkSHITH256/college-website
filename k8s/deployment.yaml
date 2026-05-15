@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: college-website-deployment
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: college-website
+
+  template:
+    metadata:
+      labels:
+        app: college-website
+
+    spec:
+      containers:
+      - name: college-website
+        image: raks25/college-website:v1
+
+        ports:
+        - containerPort: 3000

@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: college-website-ingress
+
+spec:
+  rules:
+  - host: college.local
+
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+
+        backend:
+          service:
+            name: college-website-service
+
+            port:
+              number: 80
